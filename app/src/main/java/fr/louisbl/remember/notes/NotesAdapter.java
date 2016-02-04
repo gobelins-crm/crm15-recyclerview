@@ -11,6 +11,11 @@ import java.util.List;
 import fr.louisbl.remember.R;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> {
+
+    private static final String TAG = "NotesAdapter";
+
+    private static NoteClickListener mListener;
+
     private List<Note> mNotes;
 
     public NotesAdapter(List<Note> notes) {
@@ -27,6 +32,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Note note = mNotes.get(position);
+
         holder.getNoteTitle().setText(note.title);
         holder.getNoteDescription().setText(note.description);
     }
@@ -36,7 +42,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         return mNotes.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public void setNoteClickListener(NoteClickListener mListener) {
+        NotesAdapter.mListener = mListener;
+    }
+
+    public interface NoteClickListener {
+        void onClick(int position, View v);
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView mNoteTitle;
         private final TextView mNoteDescription;
@@ -46,6 +60,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
             mNoteTitle = (TextView) itemView.findViewById(R.id.note_title);
             mNoteDescription = (TextView) itemView.findViewById(R.id.note_description);
+
+            itemView.setOnClickListener(this);
         }
 
         public TextView getNoteTitle() {
@@ -54,6 +70,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
         public TextView getNoteDescription() {
             return mNoteDescription;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mListener == null) {
+                return;
+            }
+
+            mListener.onClick(getAdapterPosition(), v);
         }
     }
 }
