@@ -9,4 +9,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="fr.louisbl.remember.MainActivity">
 
+    <fragment
+        android:id="@+id/fragment_list_notes"
+        android:name="fr.louisbl.remember.notes.ListNotes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>
