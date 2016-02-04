@@ -14,4 +14,9 @@ public class Note {
         this.title = title;
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Note " + id + ", title: " + title;
+    }
 }
