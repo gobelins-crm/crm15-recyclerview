@@ -46,6 +46,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         NotesAdapter.mListener = mListener;
     }
 
+    public void addAll(List<Note> notes) {
+        mNotes.addAll(notes);
+    }
+
     public interface NoteClickListener {
         void onClick(int position, View v);
     }

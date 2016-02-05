@@ -1,6 +1,7 @@
 package fr.louisbl.remember.notes;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,7 @@ public class ListNotes extends Fragment {
 
 
     private static final String TAG = "ListNotes Fragment";
+    private NotesAdapter mNotesAdapter;
 
     public ListNotes() {
         // Required empty public constructor
@@ -38,10 +40,9 @@ public class ListNotes extends Fragment {
 
 
         final List<Note> notes = new ArrayList<>();
-        notes.add(new Note("1", "Title", "Description"));
 
-        NotesAdapter notesAdapter = new NotesAdapter(notes);
-        notesAdapter.setNoteClickListener(new NotesAdapter.NoteClickListener() {
+        mNotesAdapter = new NotesAdapter(notes);
+        mNotesAdapter.setNoteClickListener(new NotesAdapter.NoteClickListener() {
             @Override
             public void onClick(int position, View v) {
                 Log.d(TAG, "clicked on: " + notes.get(position));
@@ -50,7 +51,27 @@ public class ListNotes extends Fragment {
 
         recyclerView.setAdapter(new NotesAdapter(notes));
 
+        loadAllNotes();
+
         return view;
     }
 
+    private void loadAllNotes() {
+        class LoadNotes extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                List<Note> notes = Note.listAll(Note.class);
+                mNotesAdapter.addAll(notes);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                mNotesAdapter.notifyDataSetChanged();
+            }
+        }
+
+        new LoadNotes().execute();
+    }
 }

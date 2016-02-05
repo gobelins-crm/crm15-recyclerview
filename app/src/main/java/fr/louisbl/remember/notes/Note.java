@@ -1,7 +1,8 @@
 package fr.louisbl.remember.notes;
 
-public class Note {
-    String id;
+import com.orm.SugarRecord;
+
+public class Note extends SugarRecord {
     String title;
     String description;
 
@@ -9,14 +10,13 @@ public class Note {
 
     }
 
-    public Note(String id, String title, String description) {
-        this.id = id;
+    public Note(String title, String description) {
         this.title = title;
         this.description = description;
     }
 
     @Override
     public String toString() {
-        return "Note " + id + ", title: " + title;
+        return "Note " + getId() + ", title: " + title;
     }
 }
